@@ -5,22 +5,43 @@ mongoose.connect(`mongodb+srv://se4200:wkTCKUq2Dabj3thD@mongotest.tny0m.mongodb.
 });
 
 const Product = mongoose.model('Product', {
-    name: String,
-    brand: String,
-    bar: String,
-    imageLink: String,
-    tags: [String]
+    name: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    brand: {
+        type: String,
+        required: true
+    },
+    bar: {
+        type: String,
+        required: true
+    },
+    imageLink: {
+        type: String,
+        required: true
+    },
+    tags: [String],
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 })
 
 const UserSchema = new mongoose.Schema({
     email: {
         type: String,
+        required: true,
+        unique: true
     },
     encryptedPassword: {
         type: String,
+        required: true
     },
     firstName: {
         type: String,
+        required: true
     },
     lastName: {
         type: String,
@@ -31,9 +52,9 @@ UserSchema.methods.setEncryptedPassword = function (plainPassword) {
     let promise = new Promise((resolve, reject) => {
         //this is the promise function
         //resolve and reject are also funcitons
-        console.log(plainPassword);
+        // console.log(plainPassword);
         bcrypt.hash(plainPassword, 12).then((hash) => { //eggs being cooked here
-            console.log(hash); 
+            // console.log(hash); 
             this.encryptedPassword = hash;
             resolve();
         });

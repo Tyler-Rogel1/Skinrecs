@@ -37,7 +37,7 @@ app.get("/products", function (request, response) {
 })
 
 app.post("/products", authorizeUser, function (request, response) {
-    // only allow posting if authenticated
+    // only allow creating if authenticated
     let newProduct = new model.Product({
         name: request.body.name,
         brand: request.body.brand,
@@ -60,9 +60,10 @@ app.post("/products", authorizeUser, function (request, response) {
         } else if (error.code === 11000) {
             // duplicate key error
             response.status(422).send("Product with this name already exists");
+        } else{
+            response.sendStatus(500);
         }
         console.log("Failed to save product", error);
-        response.sendStatus(500);
     });
     
 });
@@ -121,6 +122,8 @@ app.post("/users", function (request, response) {
             } else if (error.code === 11000) {
                 // duplicate key error
                 response.status(422).send("User with this email already exists");
+            } else {
+                response.sendStatus(500);
             }
             console.log("Failed to save user", error);
         });

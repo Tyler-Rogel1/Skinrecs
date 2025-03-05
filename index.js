@@ -4,7 +4,7 @@ const model = require('./model');
 const session = require('express-session');
 
 const app = express();
-
+app.use(express.static('public'));
 
 function authorizeUser(request, response, next) {
     if (request.session && request.session.userId) {

@@ -49,6 +49,10 @@ const app = createApp({
         },
 
         loadProductsFromAPI: function () {
+            let query = '?';
+            if (this.nameFilter) {
+                query += `name=${encodeURIComponent(this.nameFilter)}&`;
+            }
             fetch("http://localhost:8080/products", { 
                 credentials: "include" 
             }).then(response => {

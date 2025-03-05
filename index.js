@@ -31,7 +31,24 @@ app.use(session({
 
 
 app.get("/products", function (request, response) {
-    model.Product.find({}).then((products) => {
+    let filter = {};
+    let sort = {};
+    if (request.query.name) {
+        filter.name = request.query.name;
+    }
+    if (request.query.brand) {
+        filter.brand = request.query.brand;
+    }
+    if (request.query.bar) {
+        filter.bar = request.query.bar;
+    }
+    if (request.query.tags) {
+        filter.tags = request.query.tags;
+    }
+    if (request.query.sort) {
+        sort[request.query.sort] = request.query.order;
+    }
+    model.Product.find(filter).sort(sort).then((products) => {
         response.status(200).send(products);
     })
 })

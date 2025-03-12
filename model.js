@@ -4,7 +4,7 @@ mongoose.connect(`mongodb+srv://se4200:wkTCKUq2Dabj3thD@mongotest.tny0m.mongodb.
     dbName: 'skincareProducts'
 });
 
-const Product = mongoose.model('Product', {
+const productSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -27,7 +27,10 @@ const Product = mongoose.model('Product', {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }
-})
+});
+
+productSchema.index({ name: 'text' });
+const Product = mongoose.model('Product', productSchema);
 
 const UserSchema = new mongoose.Schema({
     email: {

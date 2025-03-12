@@ -6,11 +6,64 @@
     <title>Hello Vue</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.7.6/dist/vuetify.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
+
 </head>
 <body>
     <div id="app">
         <v-app>
-          <h1>hello world</h1>
+        <v-main class="bg-background">
+            <v-toolbar color="secondary">
+                <v-toolbar-title>Skin Recs</v-toolbar-title>
+                <v-btn v-if="!loggedIn" @click="showSignIn = true" class="bg-primary">
+                    Sign In
+                    <v-icon>mdi-login</v-icon>
+                </v-btn>
+                <v-btn v-if="loggedIn" @click="logOut" class="bg-primary">
+                    Log out
+                    <v-icon>mdi-logout</v-icon>
+                </v-btn>
+            </v-toolbar>
+          <v-container>
+            <v-card v-if="showSignIn" class="pa-4 my-4">
+                <v-text-field color="#dda15e" label="Email" v-model="emailInput" variant="outlined"></v-text-field>
+                <v-text-field color="#dda15e" label="Password" v-model="passwordInput" variant="outlined"></v-text-field>
+                
+                <v-btn color="#283618" @click="signIn" block class="mt-2">Log In</v-btn>
+                <p>Don't have an account? 
+                    <v-btn color="#283618" @click="showCreateAccount = true; showSignIn = false" class="pa-0" variant="text">Sign up</v-btn>
+                </p>
+            </v-card>
+            <v-card v-if="showCreateAccount" class="pa-4 my-4">
+                <v-text-field color="#dda15e" label="Email" v-model="emailInput" variant="outlined"></v-text-field>
+                <v-text-field color="#dda15e" label="Password" v-model="passwordInput" variant="outlined"></v-text-field>
+                <v-text-field color="#dda15e" label="First Name" v-model="firstNameInput" variant="outlined"></v-text-field>
+                <v-text-field color="#dda15e" label="Last Name" v-model="lastNameInput" variant="outlined"></v-text-field>
+
+                <v-btn color="#283618" @click="createAccount" block class="mt-2">Create Account</v-btn>
+                <p>Already have an account? 
+                    <v-btn color="#283618" @click="showSignIn = true; showCreateAccount = false" class="pa-0" variant="text">Log in</v-btn>
+                </p>
+            </v-card>
+            <v-card v-if="showAddProduct" class="pa-4 my-4">
+                <v-text-field color="#dda15e" label="Name" v-model="nameInput" variant="outlined"></v-text-field>
+                <v-text-field color="#dda15e" label="Brand" v-model="brandInput" variant="outlined"></v-text-field>
+                <v-text-field color="#dda15e" label="Bar" v-model="barInput" variant="outlined"></v-text-field>
+                <v-text-field color="#dda15e" label="Link to Image" v-model="imageLinkInput" variant="outlined"></v-text-field>
+
+                <v-btn color="#283618" @click="addProduct" block class="mt-2">Add Product</v-btn>
+            </v-card>
+
+            <v-row>
+                <v-col v-for="product in products" cols="12" md="4">
+                    <v-card class="pa-3">
+                        <v-card-title>{{ product.name }}</v-card-title>
+                        <v-card-subtitle>{{ product.brand }}</v-card-subtitle>
+                    </v-card>
+                </v-col>
+            </v-row>
+        </v-container>
+        </v-main>
         </v-app>
         <!-- end of the vue app -->
     </div>

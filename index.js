@@ -34,7 +34,7 @@ app.get("/products", function (request, response) {
     let filter = {};
     let sort = {};
     if (request.query.name) {
-        filter.name = request.query.name;
+        filter.$text = { $search: request.query.name };
     }
     if (request.query.brand) {
         filter.brand = request.query.brand;
@@ -43,14 +43,18 @@ app.get("/products", function (request, response) {
         filter.bar = request.query.bar;
     }
     if (request.query.tags) {
-        filter.tags = request.query.tags;
+        let tags = request.query.tags.split(",");
+        filter.tags = {$all: tags};
     }
-    if (request.query.sort) {
-        sort[request.query.sort] = request.query.order;
-    }
-    model.Product.find(filter).sort(sort).then((products) => {
+    model.Product.find(filter).then((products) => {
         response.status(200).send(products);
     })
+    // if (request.query.sort) {
+    //     sort[request.query.sort] = request.query.order;
+    // }
+    // model.Product.find(filter).sort(sort).then((products) => {
+    //     response.status(200).send(products);
+    // })
 })
 
 app.post("/products", authorizeUser, function (request, response) {

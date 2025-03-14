@@ -3,9 +3,6 @@ const { createVuetify } = Vuetify;
 
 // Create the Vuetify instance with a custom theme
 const vuetify = createVuetify({
-    icons: {
-        defaultSet: 'mdi',  // Use MDI icons
-    },
     theme: {
         defaultTheme: 'roseTheme',
         themes: {
@@ -14,14 +11,15 @@ const vuetify = createVuetify({
                 colors: {
                     primary: '#8F4A56',   
                     secondary: '#FDD3D0', 
-                    tertiary: '#F57C00',  
+                    tertiary: '#FFD5DA',
                     background: '#FFF8F7',
                     surface: '#FFFFFF',
                     error: '#D32F2F',
                     onPrimary: '#FFFFFF', 
                     onSecondary: '#5F0A0A', 
-                    onBackground: '#1C1B1F',
-                    onSurface: '#1C1B1F'      
+                    onBackground: '#22191A',
+                    onSurface: '#22191A',
+                    onSurfaceVariant: '#524345'      
                 }
             }
         }
@@ -30,6 +28,18 @@ const vuetify = createVuetify({
 const app = createApp({
     data: function () {
         return {
+            //input rules
+            rules : {
+                required: value => value.length > 0 || 'Required.',
+                email: value => {
+                    if (/.+@.+\..+/.test(value)) return true // email validation from vue docs
+                    return 'E-mail must be valid.'
+                },
+                password: value => {
+                    if (value.length >= 8) return true
+                    return 'Password must be at least 8 characters long.'
+                },
+            },
             //product add inputs
             nameInput: "",
             brandInput: "",
@@ -178,7 +188,11 @@ const app = createApp({
                 this.loadProductsFromAPI();
                 this.loggedIn = false;
             })
-        }
+        },
+
+        clickOutsideSignIn: function () {
+            this.showSignIn = false;
+        },
     },
 
 

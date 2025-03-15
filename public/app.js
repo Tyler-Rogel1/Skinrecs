@@ -1,5 +1,6 @@
 const { createApp } = Vue;
 const { createVuetify } = Vuetify;
+url = 'https://skinrecs.onrender.com/'
 
 // Create the Vuetify instance with a custom theme
 const vuetify = createVuetify({
@@ -99,7 +100,7 @@ const app = createApp({
 
         loadProductsFromAPI: function () {
             
-            fetch(`http://localhost:8080/products/`, { 
+            fetch(`${url}/products/`, { 
                 // credentials: "include" 
             }).then(response => {
                 response.json().then(data => {

@@ -1,6 +1,6 @@
 const { createApp } = Vue;
 const { createVuetify } = Vuetify;
-url = 'https://skinrecs.onrender.com/'
+url = 'https://skinrecs.onrender.com'
 
 // Create the Vuetify instance with a custom theme
 const vuetify = createVuetify({

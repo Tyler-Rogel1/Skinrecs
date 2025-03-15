@@ -100,7 +100,7 @@ const app = createApp({
         loadProductsFromAPI: function () {
             
             fetch(`http://localhost:8080/products/`, { 
-                credentials: "include" 
+                // credentials: "include" 
             }).then(response => {
                 response.json().then(data => {
                     this.products = data

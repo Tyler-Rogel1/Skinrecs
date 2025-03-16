@@ -70,10 +70,10 @@
       </v-col>
   
       <!-- products on right side-->
-      <v-col cols="9" md="9" class="d-flex flex-wrap">
+      <v-col cols="9" md="8" class="d-flex flex-wrap">
         <v-card class="pa-4 w-100">
             <v-row dense>
-              <v-col v-for="product in products" :key="product.name" cols="12" md="3" sm="6" xs="12">
+              <v-col v-for="product in products" :key="product.name" cols="12" md="4" sm="6" xs="12">
                 <v-card class="mx-auto" max-width="400">
                   <v-img
                     :src="product.imageLink"

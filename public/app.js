@@ -1,7 +1,9 @@
 const { createApp } = Vue;
 const { createVuetify } = Vuetify;
-url = 'https://skinrecs.onrender.com'   
 
+const url = window.location.hostname === 'localhost' 
+    ? 'http://localhost:8080' 
+    : 'https://skinrecs.onrender.com';
 // Create the Vuetify instance with a custom theme
 const vuetify = createVuetify({
     theme: {
@@ -85,6 +87,15 @@ const app = createApp({
                 })
             }).then(response => {
                 this.loadProductsFromAPI();
+                if (response.status === 201) {
+                this.nameInput = "";
+                this.brandInput = "";
+                this.barInput = "";
+                this.imageLinkInput = "";
+                this.tagsInput = [];
+                this.showAddProduct = false;
+                }
+
             })
         },
 

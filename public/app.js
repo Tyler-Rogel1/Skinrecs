@@ -1,5 +1,6 @@
 const { createApp } = Vue;
 const { createVuetify } = Vuetify;
+url = 'https://skinrecs.onrender.com'   
 
 // Create the Vuetify instance with a custom theme
 const vuetify = createVuetify({
@@ -69,7 +70,7 @@ const app = createApp({
                 alert("Please fill in all fields");
                 return;
             }
-            fetch("http://localhost:8080/products", {
+            fetch(`${url}/products`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
@@ -89,7 +90,7 @@ const app = createApp({
 
         deleteProduct: function (product) {
             console.log(product);
-            fetch(`http://localhost:8080/products/${product._id}`, {
+            fetch(`${url}/products/${product._id}`, {
                 method: "DELETE",
                 credentials: "include"
             }).then(response => {
@@ -99,8 +100,8 @@ const app = createApp({
 
         loadProductsFromAPI: function () {
             
-            fetch(`http://localhost:8080/products/`, { 
-                credentials: "include" 
+            fetch(`${url}/products/`, { 
+                // credentials: "include" 
             }).then(response => {
                 response.json().then(data => {
                     this.products = data
@@ -127,7 +128,7 @@ const app = createApp({
         },
 
         createAccount: function () {
-            fetch("http://localhost:8080/users", {
+            fetch(`${url}/users`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
@@ -155,7 +156,7 @@ const app = createApp({
         },
 
         signIn: function () {
-            fetch("http://localhost:8080/session", {
+            fetch(`${url}/session`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
@@ -181,7 +182,7 @@ const app = createApp({
             })
         },
         logOut: function () {
-            fetch("http://localhost:8080/session", {
+            fetch(`${url}/session`, {
                 method: "DELETE",
                 credentials: "include"
             }).then(response => {

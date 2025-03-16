@@ -60,17 +60,62 @@
   <v-container>
     <v-row no-gutters class="justify-space-between">
       <!-- filters on left side -->
-      <v-col cols="3" md="3" class="d-flex">
+      <v-col cols="3" md="4" >
         <v-card class="pa-4 w-100">
-          <v-card-title>Filters</v-card-title>
-          <v-card-text>
-            put filters here
-          </v-card-text>
+            <!-- <v-card-title class="pa-0">Filters</v-card-title> -->
+        
+            <!-- name -->
+            <v-card-subtitle class="pa-0">Name</v-card-subtitle>
+            <v-text-field 
+              color="primary"
+              v-model="nameFilter" 
+              label="Search by name"
+              variant="outlined"
+              dense
+            ></v-text-field>
+    
+            <!-- tags -->
+            <v-card-subtitle class="pa-0">Tags</v-card-subtitle>
+            <v-chip-group v-model="tagsFilter" multiple column>
+                <v-chip
+                  v-for="tag in tags"
+                  :key="tag"
+                  :value="tag"
+                  filter
+                  outlined
+                  color="primary"
+                >
+                  {{ tag }}
+                </v-chip>
+              </v-chip-group>
+    
+            <!-- brand -->
+            <v-card-subtitle class="pa-0 mb-2">Brand</v-card-subtitle>
+            <v-select
+              clearable
+              color="primary"
+              v-model="brandFilter"
+              :items="brands"
+              label="Select a brand"
+              variant="outlined"
+              dense
+            ></v-select>
+    
+            <!-- bar -->
+            <v-card-subtitle class="pa-0">Bar</v-card-subtitle>
+            <v-chip-group filter v-model="barFilter">
+                <v-chip outlined color="primary" value="front">Front</v-chip>
+                <v-chip outlined color="primary" value="back">Back</v-chip>
+            </v-chip-group>
+    
+            <!-- apply filters -->
+            <v-btn color="primary" block class="mt-4" @click="loadProductsFromAPI">Apply Filters</v-btn>
+          
         </v-card>
       </v-col>
   
       <!-- products on right side-->
-      <v-col cols="9" md="8" class="d-flex flex-wrap">
+      <v-col cols="9" md="8" >
         <v-card class="pa-4 w-100">
             <v-row dense>
               <v-col v-for="product in products" :key="product.name" cols="12" md="4" sm="6" xs="12">

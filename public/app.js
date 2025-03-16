@@ -63,6 +63,15 @@ const app = createApp({
             lastNameInput: "",
             //logged in user
             loggedIn: false,
+
+            //filters
+            nameFilter: "",
+            brandFilter: "",
+            barFilter: "",
+            tagsFilter: [],
+            // preset options for tags/brands
+            tags: ["Acne", "Oily", "Dry", "Combination", "Sensitive"],
+            brands: ["Eminence", "Skin Medica"]
         };
     },
     
@@ -111,8 +120,8 @@ const app = createApp({
 
         loadProductsFromAPI: function () {
             
-            fetch(`${url}/products/`, { 
-                // credentials: "include" 
+            fetch(`${url}/products/${this.getQuery()}`, { 
+                credentials: "include" 
             }).then(response => {
                 response.json().then(data => {
                     this.products = data
@@ -131,8 +140,10 @@ const app = createApp({
             if (this.barFilter) {
                 query += `bar=${encodeURIComponent(this.barFilter)}&`;
             }
-            if (this.tagsFilter) {
-                query += `tags=${encodeURIComponent(this.tagsFilter)}&`;
+            if (this.tagsFilter && this.tagsFilter.length) {
+                const lowerCaseTags = this.tagsFilter.map(tag => tag.toLowerCase());
+            const tagsQuery = lowerCaseTags.join(",");
+            query += `tags=${encodeURIComponent(tagsQuery)}&`;
             }
 
             return query

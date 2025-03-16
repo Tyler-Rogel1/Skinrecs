@@ -51,11 +51,12 @@ const app = createApp({
             tagsInput: [],
 
             products: [],
-            // show input toggles
+            // show screen toggles
             showCreateAccount: false,
             showSignIn: false,
             showAddProduct: false,
             showEditProduct: false,
+            showMainContent: true,
             //create account inputs
             emailInput: "",
             passwordInput: "",

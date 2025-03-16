@@ -15,7 +15,7 @@
         <v-main class="background">
             <v-toolbar color="background">
                 <v-toolbar-title>Skin Recs</v-toolbar-title>
-                <v-btn v-if="!loggedIn" @click="showSignIn = true" class="bg-primary">
+                <v-btn v-if="!loggedIn" @click="showSignIn = true; showMainContent = false" class="bg-primary">
                     Sign In
                     <v-icon>mdi-login</v-icon>
                 </v-btn>
@@ -23,12 +23,12 @@
                     Log out
                     <v-icon>mdi-logout</v-icon>
                 </v-btn>
-                <v-btn v-if="loggedIn" @click="showAddProduct = true" class="bg-primary">
+                <v-btn v-if="loggedIn" @click="showAddProduct = true; showMainContent = false" class="bg-primary">
                     Add Product
                     <v-icon>mdi-plus</v-icon>
                 </v-btn>
             </v-toolbar>
-            <v-card  v-if="showSignIn" v-click-outside="clickOutsideSignIn" class="pa-4 my-4">
+            <v-card  v-if="showSignIn" v-click-outside="clickOutsideSignIn" class="pa-4 my-4" position="absolute" >
                 <v-text-field color="primary" label="Email" v-model="emailInput" variant="outlined"></v-text-field>
                 <v-text-field color="primary" label="Password" v-model="passwordInput" variant="outlined" type="password"></v-text-field>
                 
@@ -56,8 +56,8 @@
 
                 <v-btn color="primary" @click="addProduct" block class="mt-2">Add Product</v-btn>
             </v-card>
-
-  <v-container>
+<!-- main content -->
+  <v-container v-if="showMainContent">
     <v-row no-gutters class="justify-space-between">
       <!-- filters on left side -->
       <v-col cols="3" md="4" >

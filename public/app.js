@@ -296,7 +296,7 @@ const app = createApp({
             }).then(response => {
                 this.loadProductsFromAPI();
                 if (response.status === 401) {
-                    this.snackbar("User not found");
+                    this.snackbar("Wrong email or password");
                 } else if (response.status === 201) {
                     this.emailInput = "";
                     this.passwordInput = "";

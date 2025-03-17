@@ -63,6 +63,7 @@ const app = createApp({
             showMainContent: true,
             showDetailedProduct: false,
             detailedProduct: null,
+            showDeleteConfirm: false,
             //create account inputs
             emailInput: "",
             passwordInput: "",
@@ -84,6 +85,30 @@ const app = createApp({
             brands: ["Eminence", "Alastin", "Skin Medica", "SkinMedica DiamondGlow", "EltaMD", "Glymed", "Hydrinity", "SkinBetter", "SkinCeuticals"]
         };
     },
+    //update products when filters change
+    watch: {
+        tagsFilter: {
+            handler() {
+                this.loadProductsFromAPI();
+            },
+        },
+        brandFilter: {
+            handler() {
+                this.loadProductsFromAPI();
+            },
+        },
+        barFilter: {
+            handler() {
+                this.loadProductsFromAPI();
+            },
+        },
+        // nameFilter: {
+        //     handler() {
+        //         this.loadProductsFromAPI();
+        //     },
+        // },
+
+      },
     
     methods: {
         addProduct: function () {
@@ -115,6 +140,8 @@ const app = createApp({
                 this.showAddProduct = false;
                 this.showMainContent = true;
                 this.snackbar("Product successfully added!");
+                } else {
+                    this.snackbar("Failed to add product, product with this name already exists");
                 }
 
             })
@@ -222,6 +249,7 @@ const app = createApp({
             this.tagsFilter = [];
             this.brandFilter = null;
             this.barFilter = [];
+            this.loadProductsFromAPI();
         },
 
         createAccount: function () {

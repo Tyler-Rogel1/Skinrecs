@@ -51,12 +51,18 @@ const app = createApp({
             tagsInput: [],
 
             products: [],
+
+            //snackbar
+            showSnackbar: false,
+            snackbarText: "",
             // show screen toggles
             showCreateAccount: false,
             showSignIn: false,
             showAddProduct: false,
             showEditProduct: false,
             showMainContent: true,
+            showDetailedProduct: false,
+            detailedProduct: null,
             //create account inputs
             emailInput: "",
             passwordInput: "",
@@ -71,15 +77,18 @@ const app = createApp({
             barFilter: "",
             tagsFilter: [],
             // preset options for tags/brands
-            tags: ["Acne", "Oily", "Dry", "Combination", "Sensitive"],
-            brands: ["Eminence", "Skin Medica"]
+            tags: ["Acne", "Oily", "Dry", "Sensitive", "Combination", "Normal" ,
+                 "All", "Anti-aging", "Hyperpigmentation", "Rosacea", "Erythema",
+                  "Dark circles", "Brightening", "SPF", "Cleansers", "Serums", 
+                  "Masks","Moisturizers", "Exfoliants", "Mists", "Eye Creams", "Chemical Peel"],
+            brands: ["Eminence", "Alastin", "Skin Medica", "SkinMedica DiamondGlow", "EltaMD", "Glymed", "Hydrinity", "SkinBetter", "SkinCeuticals"]
         };
     },
     
     methods: {
         addProduct: function () {
             if (this.nameInput === "" || this.brandInput === "" || this.barInput === "" || this.imageLinkInput === "") {
-                alert("Please fill in all fields");
+                this.snackbar("Please fill out all fields");
                 return;
             }
             fetch(`${url}/products`, {
@@ -104,9 +113,20 @@ const app = createApp({
                 this.imageLinkInput = "";
                 this.tagsInput = [];
                 this.showAddProduct = false;
+                this.showMainContent = true;
+                this.snackbar("Product successfully added!");
                 }
 
             })
+        },
+        cancelAddProduct: function () {
+            this.nameInput = "";
+            this.brandInput = "";
+            this.barInput = "";
+            this.imageLinkInput = "";
+            this.tagsInput = [];
+            this.showAddProduct = false;
+            this.showMainContent = true;
         },
 
         deleteProduct: function (product) {
@@ -116,9 +136,54 @@ const app = createApp({
                 credentials: "include"
             }).then(response => {
                 this.loadProductsFromAPI();
+                if (response.status === 200) {
+                    this.showEditProduct = false;
+                    this.showDetailedProduct = false;
+                    this.detailedProduct = null;
+                    this.showMainContent = true;
+                    this.snackbar("Product successfully deleted!");
+                } else {
+                    this.snackbar(response.status + ": Failed to delete product");
+                }
             });
         },
 
+        editProduct: function (product) {
+            if (this.detailedProduct.name === "" || this.detailedProduct.brand === "" || this.detailedProduct.bar === "" || this.detailedProduct.imageLink === "") {
+                this.snackbar("Please fill out all fields");
+                return;
+            }
+            fetch(`${url}/products/${product._id}`, {
+                method: "PUT",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: this.detailedProduct.name,
+                    brand: this.detailedProduct.brand,
+                    bar: this.detailedProduct.bar,
+                    imageLink: this.detailedProduct.imageLink,
+                    tags: this.detailedProduct.tags
+                })
+            }).then(response => {
+                this.loadProductsFromAPI();
+                if (response.status === 200) {
+                this.showEditProduct = false;
+                this.showMainContent = true;
+                this.detailedProduct = null;
+                this.snackbar("Changes saved");
+                } else {
+                    this.snackbar(response.status + ": Failed to edit product");
+                }
+
+            })
+        },
+        cancelEditProduct: function () {
+            this.showEditProduct = false;
+            this.showMainContent = true;
+            this.detailedProduct = null;
+        },
         loadProductsFromAPI: function () {
             
             fetch(`${url}/products/${this.getQuery()}`, { 
@@ -126,6 +191,9 @@ const app = createApp({
             }).then(response => {
                 response.json().then(data => {
                     this.products = data
+                    if (this.products.length == 0) {
+                        this.snackbar("No products found");
+                    }
                 })
             })
         },
@@ -142,15 +210,25 @@ const app = createApp({
                 query += `bar=${encodeURIComponent(this.barFilter)}&`;
             }
             if (this.tagsFilter && this.tagsFilter.length) {
-                const lowerCaseTags = this.tagsFilter.map(tag => tag.toLowerCase());
-            const tagsQuery = lowerCaseTags.join(",");
+            const tagsQuery = this.tagsFilter.join(",");
             query += `tags=${encodeURIComponent(tagsQuery)}&`;
             }
 
             return query
         },
 
+        clearFilters: function () {
+            this.nameFilter = "";
+            this.tagsFilter = [];
+            this.brandFilter = null;
+            this.barFilter = [];
+        },
+
         createAccount: function () {
+            if (this.emailInput === "" || this.passwordInput === "" || this.firstNameInput === "" || this.lastNameInput === "") {
+                this.snackbar("Please fill out all fields");
+                return;
+            }
             fetch(`${url}/users`, {
                 method: "POST",
                 credentials: "include",
@@ -169,11 +247,9 @@ const app = createApp({
                     this.showCreateAccount = false;
                     this.signIn();
                 } else if (response.status === 422) {
-                    alert("User with this email already exists");
-                    //actually send a useful error
+                    this.snackbar("User already exists");
                 } else {
-                    alert("Something went wrong");
-                    //some 500 error occurred
+                    this.snackbar(response.status + ": Failed to create user");
                 }
             })
         },
@@ -192,15 +268,17 @@ const app = createApp({
             }).then(response => {
                 this.loadProductsFromAPI();
                 if (response.status === 401) {
-                    alert("User not found");
-                    //actually send a useful error
+                    this.snackbar("User not found");
                 } else if (response.status === 201) {
                     this.emailInput = "";
                     this.passwordInput = "";
+                    const firstName = this.firstNameInput;
+                    this.snackbar("You are now signed in! Welcome!");
                     this.firstNameInput = "";
                     this.lastNameInput = "";
                     this.showSignIn = false;
                     this.loggedIn = true;
+                    this.showMainContent = true;
                 }
             })
         },
@@ -211,12 +289,21 @@ const app = createApp({
             }).then(response => {
                 this.loadProductsFromAPI();
                 this.loggedIn = false;
+                this.showMainContent = true;
+                this.showSignIn = false;
+                this.showCreateAccount = false;
+                this.showAddProduct = false;
+                this.showEditProduct = false;
+                this.showDetailedProduct = false;
+                this.detailedProduct = null;
+                this.snackbar("You are now signed out!");
             })
         },
 
-        clickOutsideSignIn: function () {
-            this.showSignIn = false;
-        },
+        snackbar: function (message) {
+            this.snackbarText = message;
+            this.showSnackbar =true;
+        }
     },
 
 

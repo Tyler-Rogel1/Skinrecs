@@ -2,10 +2,7 @@
 
 SkinRecs is a web app built with Express.js, MongoDB, Vue, and Vuetify. Made for my esthetician sister and her coworkers, it has authentication, product management, and user session handling.
 
-## App Link
-
-[https://skinrecs.onrender.com/](https://skinrecs.onrender.com/)
-
+![Image of Skinrecs homescreen without data showing](images/homescreen.png)
 ## Figma link
 
 [figma](https://www.figma.com/design/9L146pEzJebFsezt42CH9x/SkinRecs?node-id=0-1&amp;p=f&amp;t=kltjI4phqKclH8AK-0)
